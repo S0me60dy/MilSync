@@ -1,0 +1,71 @@
+## Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+bin/
+obj/
+out/
+publish/
+*.ncrunchsolution
+
+## .NET / NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## EF Core migrations (keep migrations, ignore snapshots if desired)
+# Uncomment below to ignore auto-generated migration designer files:
+# **/Migrations/*Designer.cs
+
+## SQLite dev database (never commit real data)
+*.db
+*.sqlite
+*.sqlite3
+
+## Secrets & config (NEVER commit these)
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+.env
+*.pfx
+*.p12
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+## Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Logs
+logs/
+*.log
+
+## OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
