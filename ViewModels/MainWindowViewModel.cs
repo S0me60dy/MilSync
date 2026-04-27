@@ -1,4 +1,5 @@
-﻿namespace MilSyn.ViewModels;
+﻿// The main entry point where all the logic is handled
+namespace MilSyn.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
