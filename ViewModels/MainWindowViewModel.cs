@@ -1,7 +1,18 @@
 ﻿// The main entry point where all the logic is handled
-namespace MilSyn.ViewModels;
+using MilSyn.Services;
 
-public partial class MainWindowViewModel : ViewModelBase
+namespace MilSyn.ViewModels
+{
+    public partial class MainWindowViewModel : ViewModelBase
 {
     public string Greeting { get; } = "Welcome to Avalonia!";
+    public string ConnectionStatus { get; }
+
+    public MainWindowViewModel()
+    {
+        var dbService = new DatabaseService();
+        ConnectionStatus = dbService.TestConnection() ? "Successfully connected to MySQL database!" : "Failed to connect to MySQL database.";
+    }
+}
+
 }

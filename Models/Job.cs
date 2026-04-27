@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 namespace MilSyn.Models
 {
     public class Job
@@ -11,6 +12,11 @@ namespace MilSyn.Models
         
         // Relationships in DB, adding "foreign keys"(navigation properties)
 
-        public List<Application> Applications { get; set; }
+        public List<Application> Applications { get; set; } = new();
+
+        public Job()
+        {
+            Applications = new List<Application>();
+        }
     }
 }
