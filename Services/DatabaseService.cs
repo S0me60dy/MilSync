@@ -1,5 +1,4 @@
 using MySql.Data.MySqlClient;
-using MySql.Data.MySqlClient.Interceptors;
 using System;
 namespace MilSyn.Services
 {
@@ -26,6 +25,37 @@ namespace MilSyn.Services
             }
             // either catch other exceptions or create a finally block to handle a cleanup
             return true;
+        }
+        public string? GetUserHash(string username)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = $"SELECT PasswordHash FROM USER WHERE Username = @username"; // using the parameterized query to prevent SQL injection
+                    using (var cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        var result = cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            return result?.ToString();
+                        }
+                        else
+                        {
+                            Console.WriteLine("User doesn't exist.");
+                            return null;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                return null;
+            }
         }
     }
 }

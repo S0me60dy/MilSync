@@ -31,8 +31,11 @@ namespace MilSync.Helpers
             return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
         }
 
-        public string UnHashPassword(string password, string HashedPassword)
+        public bool CheckPassword(string password, string HashedPassword)
         {
+            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(HashedPassword))
+                return false;
+
             var parts = HashedPassword.Split(':');
             byte[] salt = Convert.FromBase64String(parts[0]);
             byte[] hash = Convert.FromBase64String(parts[1]);
@@ -47,7 +50,7 @@ namespace MilSync.Helpers
 
             byte[] newHash = argon2.GetBytes(HashSize);
 
-            return (Convert.ToBase64String(newHash) == Convert.ToBase64String(hash)) ? "The password is correct." : "The password is incorrect.";
+            return Convert.ToBase64String(newHash) == Convert.ToBase64String(hash);
         }
     }
 }

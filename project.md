@@ -36,7 +36,7 @@ The structure created by AvaloniaUI:
 	- ViewModels: the place where all the logic is handled
 	- Views: all the UI
 	- Assets: all the images
-
+https://github.com/kmaragon/Konscious.Security.Cryptography // Argon2id repository
 
 
 Check later for Sasha:

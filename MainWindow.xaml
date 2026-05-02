@@ -14,6 +14,6 @@
         <Label Content="Password" />
         <PasswordBox Name="passwordBox" Margin="0,0,0,20"/>
 
-        <Button Content="Login" Height="30" Background="#007ACC" Foreground="White" />
+        <Button Content="Login" Click="OnClickLogin" Height="30" Background="#007ACC" Foreground="White" />
     </StackPanel>
 </Window>
