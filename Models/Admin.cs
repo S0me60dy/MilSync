@@ -1,4 +1,4 @@
-namespace MilSyn.Models
+namespace MilSync.Models
 {
     public class Admin : User
     {

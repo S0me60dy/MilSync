@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace MilSyn.Models
+namespace MilSync.Models
 {
     public class Job
     {

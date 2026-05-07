@@ -37,7 +37,7 @@ The structure created by AvaloniaUI:
 	- Views: all the UI
 	- Assets: all the images
 https://github.com/kmaragon/Konscious.Security.Cryptography // Argon2id repository
-
+Consider creating the abstract class user to allow future scaling of an app into CivilianUser and MilitaryUser
 
 Check later for Sasha:
 - abstract
@@ -46,3 +46,4 @@ Check later for Sasha:
 - null, default values in constructor
 - inheritance
 - required keyword
+- partial class

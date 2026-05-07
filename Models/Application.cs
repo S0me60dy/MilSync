@@ -1,6 +1,6 @@
 using System;
 
-namespace MilSyn.Models
+namespace MilSync.Models
 {
     public class Application
     {

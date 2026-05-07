@@ -1,0 +1,71 @@
+<Window x:Class="MilSync.Views.UserExperience"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MilSync - User Experience" Height="550" Width="800"
+        Background="#ECEFF1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/> <RowDefinition Height="*"/>  </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#34495E" Padding="15,0">
+            <DockPanel VerticalAlignment="Center">
+                <TextBlock Text="MilSync User Portal" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button Content="Logout" Click="Logout_Click" DockPanel.Dock="Right" Background="#C0392B" Foreground="White" Padding="10,5" BorderThickness="0"/>
+                <TextBlock x:Name="WelcomeText" Text="Welcome, User" Foreground="#BDC3C7" HorizontalAlignment="Right" Margin="0,0,20,0" VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
+
+        <TabControl Grid.Row="1" Margin="10" Background="Transparent" BorderThickness="0">
+            <TabItem Header="My Records">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0" Background="White">
+                        <Ellipse Width="100" Height="100" Fill="#BDC3C7" Margin="0,0,0,15"/>
+                        <TextBlock x:Name="ProfileUsername" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="ProfileRole" Foreground="Gray" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <Separator/>
+                        <TextBlock Text="Email:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="ProfileEmail" TextWrapping="Wrap"/>
+                        <TextBlock Text="Rank/Status:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="ProfileRank"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1" Margin="10,0,0,0" Background="White" Padding="15">
+                        <StackPanel>
+                            <TextBlock Text="Medical &amp; Military History" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <TextBlock Text="Confidential records are displayed below." Foreground="DimGray" FontStyle="Italic" Margin="0,0,0,10"/>
+                            <ScrollViewer Height="250">
+                                <TextBlock x:Name="RecordsContent" Text="No records found." TextWrapping="Wrap"/>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Browse Jobs">
+                <Grid Margin="10" Background="White">
+                    <StackPanel Margin="15">
+                        <TextBlock Text="Available Career Paths" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <DataGrid x:Name="JobsGrid" AutoGenerateColumns="False" Height="300" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                                <DataGridTextColumn Header="Requirement" Binding="{Binding Requirements}" Width="*"/>
+                                <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Apply" Click="Apply_Click" Background="#27AE60" Foreground="White" BorderThickness="0"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

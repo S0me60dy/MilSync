@@ -3,8 +3,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Konscious.Security.Cryptography;
+using MilSync.Models;
 
-namespace MilSync.Helpers
+namespace MilSync.Services
 {
     public class PasswordHasher
     {

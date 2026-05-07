@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using MilSyn.Models;
+using MilSync.Models;
 using MySql.Data.MySqlClient;
 
-namespace MilSyn.Services
+namespace MilSync.Services
 {
     public class AdminService
     {
@@ -36,7 +36,7 @@ namespace MilSyn.Services
                             Email = reader.GetString("Email"),
                             Rank = reader.IsDBNull(reader.GetOrdinal("Rank")) ? null : reader.GetString("Rank"),
                             IsActive = reader.GetBoolean("IsActive"),
-                            Role = reader.GetBoolean("Role")
+                            Role = reader.GetString("Role")
                         });
                     }
                 }
@@ -44,7 +44,7 @@ namespace MilSyn.Services
             return users;
         }
 
-        public User GetUserById(int userId)
+        public User? GetUserById(int userId)
         {
             using (var conn = _dbService.GetConnection())
             {
@@ -64,7 +64,7 @@ namespace MilSyn.Services
                                 Email = reader.GetString("Email"),
                                 Rank = reader.IsDBNull(reader.GetOrdinal("Rank")) ? null : reader.GetString("Rank"),
                                 IsActive = reader.GetBoolean("IsActive"),
-                                Role = reader.GetBoolean("Role"),
+                                Role = reader.GetString("Role"),
                                 PasswordHash = null
                             };
                         }
@@ -74,7 +74,7 @@ namespace MilSyn.Services
             return null;
         }
 
-        public bool CreateUser(string username, string email, string passwordHash, string rank = null, bool isActive = true)
+        public bool CreateUser(string username, string email, string passwordHash, string? rank = null, bool isActive = true)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace MilSyn.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating user: {ex.Message}");
+                Logger.LogException(ex, "Error creating user");
                 return false;
             }
         }
@@ -119,7 +119,7 @@ namespace MilSyn.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting user: {ex.Message}");
+                Logger.LogException(ex, "Error deleting user");
                 return false;
             }
         }
@@ -147,7 +147,7 @@ namespace MilSyn.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating user: {ex.Message}");
+                Logger.LogException(ex, "Error updating user");
                 return false;
             }
         }

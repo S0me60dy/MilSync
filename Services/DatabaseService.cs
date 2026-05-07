@@ -1,6 +1,8 @@
+using MilSync.Models;
 using MySql.Data.MySqlClient;
 using System;
-namespace MilSyn.Services
+
+namespace MilSync.Services
 {
     public class DatabaseService
     {
@@ -20,7 +22,7 @@ namespace MilSyn.Services
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine($"MySQL Connection Error: {ex.Message}");
+                Logger.LogException(ex, "MySQL Connection Error");
                 return false;
             }
             // either catch other exceptions or create a finally block to handle a cleanup
@@ -44,7 +46,7 @@ namespace MilSyn.Services
                         }
                         else
                         {
-                            Console.WriteLine("User doesn't exist.");
+                            Logger.Log("User doesn't exist.");
                             return null;
                         }
                     }
@@ -53,8 +55,52 @@ namespace MilSyn.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General Error: {ex.Message}");
+                Logger.LogException(ex, "General Error");
                 return null;
+            }
+        }
+        public User? GetUserbyUsername(string username)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = $"SELECT * FROM USER WHERE Username = @username";
+                    using (var cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                User user = new User
+                                {
+                                    UserID = reader.GetInt32("UserID"),
+                                    Username = reader.GetString("Username"),
+                                    PasswordHash = reader.GetString("PasswordHash"),
+                                    Email = reader.GetString("Email"),
+                                    Rank = reader.IsDBNull(reader.GetOrdinal("Rank")) ? null : reader.GetString("Rank"),
+                                    ProfilePicture = reader.IsDBNull(reader.GetOrdinal("ProfilePicture")) ? null : reader.GetString("ProfilePicture"),
+                                    IsActive = reader.GetBoolean("IsActive"),
+                                    Role = reader.GetString("Role")
+                                };
+                                return user;
+                            }
+                            else
+                            {
+                                Logger.Log("User doesn't exist.");
+                                return null;
+                            }
+                        }
+                    }
+
+                }
+            } catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error occurred while fetching the user");
+                return null;
+                
             }
         }
     }
