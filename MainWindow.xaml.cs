@@ -78,12 +78,15 @@ public partial class MainWindow : Window
                             MessageBox.Show("Unknown user role. Access denied.");
                             return;
                     }
-                }     
-                else 
+
+                    nextWindow.Show();
+                    this.Close();
+                }
+                else
                 {
                     MessageBox.Show("User not found:(");
                     return;
-                }     
+                }
             }
             else
             {
