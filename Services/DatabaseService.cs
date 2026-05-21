@@ -1,6 +1,8 @@
 using MilSync.Models;
 using MySql.Data.MySqlClient;
 using Bogus;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 
 
@@ -32,12 +34,10 @@ namespace MilSync.Services
         }
         public void CreateTestUsers()
         {
-            var ranks = new[] { "Major", "Sergeant", "Corporal", "Private", null };
-            var roles = new[] { "Admin", "User"};
+            var roles = new[] { "Admin", "User" };
             var fakerUser = new Faker<User>()
                 .RuleFor(u => u.Username, f => f.Internet.UserName())
                 .RuleFor(u => u.Email, f => f.Internet.Email())
-                .RuleFor(u => u.Rank, f => f.PickRandom(ranks))
                 .RuleFor(u => u.Role, f => f.PickRandom(roles))
                 .RuleFor(u => u.IsActive, f => f.Random.Bool(0.8f));
             List<User> fakeUsers = fakerUser.Generate(100);
@@ -51,13 +51,12 @@ namespace MilSync.Services
                     string passwordHash = hashingService.HashPassword(password);
                     foreach (var user in fakeUsers)
                     {
-                        string sql = "INSERT INTO USER (Username, PasswordHash, Email, Rank, IsActive, Role) VALUES (@username, @passwordHash, @email, @rank, @isActive, @role)";
+                        string sql = "INSERT INTO USER (Username, PasswordHash, Email, IsActive, Role) VALUES (@username, @passwordHash, @email, @isActive, @role)";
                         using (var cmd = new MySqlCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@username", user.Username);
                             cmd.Parameters.AddWithValue("@passwordHash", passwordHash);
                             cmd.Parameters.AddWithValue("@email", user.Email);
-                            cmd.Parameters.AddWithValue("@rank", user.Rank);
                             cmd.Parameters.AddWithValue("@isActive", user.IsActive);
                             cmd.Parameters.AddWithValue("@role", user.Role);
                             cmd.ExecuteNonQuery();
@@ -123,10 +122,9 @@ namespace MilSync.Services
                                     Username = reader.GetString("Username"),
                                     PasswordHash = reader.GetString("PasswordHash"),
                                     Email = reader.GetString("Email"),
-                                    Rank = reader.IsDBNull(reader.GetOrdinal("Rank")) ? null : reader.GetString("Rank"),
                                     ProfilePicture = reader.IsDBNull(reader.GetOrdinal("ProfilePicture")) ? null : reader.GetString("ProfilePicture"),
                                     IsActive = reader.GetBoolean("IsActive"),
-                                    Role = reader.GetString("Role")
+                                    Role = reader.GetString("Role"),
                                 };
                                 return user;
                             }
@@ -145,6 +143,81 @@ namespace MilSync.Services
                 return null;
                 
             }
+        }
+
+        public MilitaryRecord? GetMilitaryRecordByUserId(int userId)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = "SELECT RecordID, UserID, CurrentRank, ServiceStatus, LastUpdateDate, ResidentialAddress FROM MILITARY_RECORD WHERE UserID = @userID LIMIT 1";
+                    using (var cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@userID", userId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                var record = new MilitaryRecord
+                                {
+                                    MilitaryID = reader.GetInt32("RecordID"),
+                                    UserID = reader.GetInt32("UserID"),
+                                    CurrentRank = reader.IsDBNull(reader.GetOrdinal("CurrentRank")) ? null : reader.GetString("CurrentRank"),
+                                    ServiceStatus = reader.IsDBNull(reader.GetOrdinal("ServiceStatus")) ? null : reader.GetString("ServiceStatus"),
+                                    LastUpdateDate = reader.IsDBNull(reader.GetOrdinal("LastUpdateDate")) ? DateTime.MinValue : reader.GetDateTime("LastUpdateDate"),
+                                    ResidentialAddress = reader.IsDBNull(reader.GetOrdinal("ResidentialAddress")) ? null : reader.GetString("ResidentialAddress"),
+                                };
+                                return record;
+                            }
+                            return null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error fetching military record");
+                return null;
+            }
+        }
+
+        public List<MedicalRecord> GetMedicalRecordsByUserId(int userId)
+        {
+            var records = new List<MedicalRecord>();
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = "SELECT MedicalID, UserID, BloodType, FitnessStatus, Allergies, DocumentPath FROM MEDICAL_RECORD WHERE UserID = @userID";
+                    using (var cmd = new MySqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@userId", userId);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                records.Add(new MedicalRecord
+                                {
+                                    MedicalID = reader.GetInt32("MedicalID"),
+                                    UserID = reader.GetInt32("UserID"),
+                                    BloodType = reader.IsDBNull(reader.GetOrdinal("BloodType")) ? null : reader.GetString("BloodType"),
+                                    FitnessStatus = reader.IsDBNull(reader.GetOrdinal("FitnessStatus")) ? null : reader.GetString("FitnessStatus"),
+                                    Allergies = reader.IsDBNull(reader.GetOrdinal("Allergies")) ? null : reader.GetString("Allergies"),
+                                    DocumentPath = reader.IsDBNull(reader.GetOrdinal("DocumentPath")) ? null : reader.GetString("DocumentPath"),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error fetching medical records");
+            }
+            return records;
         }
     }
 }

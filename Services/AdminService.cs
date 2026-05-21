@@ -21,7 +21,7 @@ namespace MilSync.Services
             {
                 conn.Open();
                 // SQL based on your USER table structure
-                string sql = "SELECT UserID, Username, Email, Rank, IsActive, Role FROM USER";
+                string sql = "SELECT UserID, Username, Email, IsActive, Role FROM USER";
                 using (var cmd = new MySqlCommand(sql, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -34,7 +34,6 @@ namespace MilSync.Services
                             PasswordHash = null, // Don't retrieve password hash for security reasons
                             Username = reader.GetString("Username"),
                             Email = reader.GetString("Email"),
-                            Rank = reader.IsDBNull(reader.GetOrdinal("Rank")) ? null : reader.GetString("Rank"),
                             IsActive = reader.GetBoolean("IsActive"),
                             Role = reader.GetString("Role")
                         });
@@ -49,7 +48,7 @@ namespace MilSync.Services
             using (var conn = _dbService.GetConnection())
             {
                 conn.Open();
-                string sql = "SELECT UserID, Username, Email, Rank, IsActive, Role FROM USER WHERE UserID = @userId";
+                string sql = "SELECT UserID, Username, Email, IsActive, Role FROM USER WHERE UserID = @userId";
                 using (var cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@userId", userId);
@@ -62,7 +61,6 @@ namespace MilSync.Services
                                 UserID = reader.GetInt32("UserID"),
                                 Username = reader.GetString("Username"),
                                 Email = reader.GetString("Email"),
-                                Rank = reader.IsDBNull(reader.GetOrdinal("Rank")) ? null : reader.GetString("Rank"),
                                 IsActive = reader.GetBoolean("IsActive"),
                                 Role = reader.GetString("Role"),
                                 PasswordHash = null
@@ -74,20 +72,19 @@ namespace MilSync.Services
             return null;
         }
 
-        public bool CreateUser(string username, string email, string passwordHash, string? rank = null, bool isActive = true)
+        public bool CreateUser(string username, string email, string passwordHash, bool isActive = true)
         {
             try
             {
                 using (var conn = _dbService.GetConnection())
                 {
                     conn.Open();
-                    string sql = "INSERT INTO USER (Username, Email, PasswordHash, Rank, IsActive) VALUES (@username, @email, @passwordHash, @rank, @isActive)";
+                    string sql = "INSERT INTO USER (Username, Email, PasswordHash, IsActive) VALUES (@username, @email, @passwordHash, @isActive)";
                     using (var cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@username", username);
                         cmd.Parameters.AddWithValue("@email", email);
                         cmd.Parameters.AddWithValue("@passwordHash", passwordHash);
-                        cmd.Parameters.AddWithValue("@rank", rank ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@isActive", isActive);
                         cmd.ExecuteNonQuery();
                         return true;
@@ -131,12 +128,11 @@ namespace MilSync.Services
                 using (var conn = _dbService.GetConnection())
                 {
                     conn.Open();
-                    string sql = "UPDATE USER SET Username = @username, Email = @email, Rank = @rank, IsActive = @isActive, Role = @role WHERE UserID = @userId";
+                    string sql = "UPDATE USER SET Username = @username, Email = @email, IsActive = @isActive, Role = @role WHERE UserID = @userId";
                     using (var cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@username", user.Username);
                         cmd.Parameters.AddWithValue("@email", user.Email);
-                        cmd.Parameters.AddWithValue("@rank", user.Rank ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@isActive", user.IsActive);
                         cmd.Parameters.AddWithValue("@role", user.Role);
                         cmd.Parameters.AddWithValue("@userId", user.UserID);

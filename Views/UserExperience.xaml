@@ -30,7 +30,7 @@
                         <Separator/>
                         <TextBlock Text="Email:" FontWeight="Bold" Margin="0,10,0,0"/>
                         <TextBlock x:Name="ProfileEmail" TextWrapping="Wrap"/>
-                        <TextBlock Text="Rank/Status:" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <TextBlock Text="Rank:" FontWeight="Bold" Margin="0,10,0,0"/>
                         <TextBlock x:Name="ProfileRank"/>
                     </StackPanel>
 

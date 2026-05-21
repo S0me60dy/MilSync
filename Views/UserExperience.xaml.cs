@@ -33,15 +33,67 @@ namespace MilSync.Views
             ProfileUsername.Text = user.Username;
             ProfileRole.Text = user.Role;
             ProfileEmail.Text = user.Email;
-            ProfileRank.Text = user.Rank ?? "N/A";
-            
+
             LoadUserData();
         }
 
         private void LoadUserData()
         {
-            // Here you will call your services to load Job and Record data
-            // JobsGrid.ItemsSource = jobService.GetAvailableJobs();
+            try
+            {
+                var db = new DatabaseService();
+                var militaryRecord = db.GetMilitaryRecordByUserId(_currentUser.UserID);
+                var medicalRecords = db.GetMedicalRecordsByUserId(_currentUser.UserID);
+
+                if (militaryRecord != null)
+                {
+                    ProfileRank.Text = string.IsNullOrWhiteSpace(militaryRecord.CurrentRank) ? "N/A" : militaryRecord.CurrentRank;
+                }
+                else
+                {
+                    ProfileRank.Text = "N/A";
+                }
+
+                var sb = new StringBuilder();
+                sb.AppendLine("Military Record:");
+                if (militaryRecord != null)
+                {
+                    sb.AppendLine($"- Rank: {militaryRecord.CurrentRank ?? "N/A"}");
+                    sb.AppendLine($"- Status: {militaryRecord.ServiceStatus ?? "N/A"}");
+                    sb.AppendLine($"- Updated: {militaryRecord.LastUpdateDate:yyyy-MM-dd}");
+                    sb.AppendLine($"- Address: {militaryRecord.ResidentialAddress ?? "N/A"}");
+                }
+                else
+                {
+                    sb.AppendLine("- No military record found.");
+                }
+
+                sb.AppendLine();
+                sb.AppendLine("Medical Records:");
+                if (medicalRecords.Count > 0)
+                {
+                    foreach (var record in medicalRecords)
+                    {
+                        sb.AppendLine($"- Blood Type: {record.BloodType ?? "N/A"}");
+                        sb.AppendLine($"  Fitness: {record.FitnessStatus ?? "N/A"}");
+                        sb.AppendLine($"  Allergies: {record.Allergies ?? "None"}");
+                        sb.AppendLine($"  Document: {record.DocumentPath ?? "N/A"}");
+                        sb.AppendLine();
+                    }
+                }
+                else
+                {
+                    sb.AppendLine("- No medical records found.");
+                }
+
+                RecordsContent.Text = sb.ToString().Trim();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error loading records for UI");
+                RecordsContent.Text = "Unable to load records at this time.";
+                ProfileRank.Text = "N/A";
+            }
         }
 
         private void Apply_Click(object sender, RoutedEventArgs e)
