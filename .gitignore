@@ -483,3 +483,4 @@ $RECYCLE.BIN/
 wine_build/
 errors.txt
 .wine_build/
+.wine_build/
