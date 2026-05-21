@@ -1,17 +1,6 @@
-﻿using System.Drawing.Text;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using MilSync.ViewModels;
 using MilSync.Services;
-using Org.BouncyCastle.Asn1;
 using MilSync.Models;
 using MilSync.Views;
 
@@ -27,6 +16,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         this.DataContext = new LoginViewModel();
+
     }
     public void OnClickLogin(object sender, RoutedEventArgs e)
     {
@@ -34,6 +24,7 @@ public partial class MainWindow : Window
         if (loginVM == null)
             return;
         var dbService = new DatabaseService();
+        // dbService.CreateTestUsers();
         var hashingService = new PasswordHasher();
 
         string? username = loginVM.Username;
