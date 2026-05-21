@@ -482,3 +482,4 @@ $RECYCLE.BIN/
 *.swp
 wine_build/
 errors.txt
+.wine_build/
