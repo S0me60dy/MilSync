@@ -6,9 +6,7 @@ using MilSync.Views;
 
 namespace MilSync;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
+
 public partial class MainWindow : Window
 {
     

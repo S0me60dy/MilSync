@@ -5,7 +5,7 @@ namespace MilSync.Models
     {
         public int AuditLogId { get; set; }
         public int RecordId { get; set; }
-        public int? ChangedByUserId { get; set; } // Tracks which Admin made the change 
+        public int? ChangedByUserId { get; set; }
         public string? ChangeType { get; set; }
         public DateTime? ChangeTimestamp { get; set; } = DateTime.UtcNow;
         public string? OldValues { get; set; }

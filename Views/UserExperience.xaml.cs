@@ -16,9 +16,7 @@ using MilSync.Models;
 
 namespace MilSync.Views
 {
-    /// <summary>
-    /// Interaction logic for UserExperience.xaml
-    /// </summary>
+
     public partial class UserExperience : Window
     {
         private User _currentUser;
@@ -28,13 +26,14 @@ namespace MilSync.Views
             InitializeComponent();
             _currentUser = user;
 
-            // Initialize UI with User Data
             WelcomeText.Text = $"Welcome, {user.Username}";
             ProfileUsername.Text = user.Username;
             ProfileRole.Text = user.Role;
             ProfileEmail.Text = user.Email;
 
             LoadUserData();
+            Load_Jobs();
+            Load_User_Applications();
         }
 
         private void LoadUserData()
@@ -96,6 +95,34 @@ namespace MilSync.Views
             }
         }
 
+        private void Load_Jobs()
+        {
+            try
+            {
+                var db = new DatabaseService();
+                var jobs = db.GetJobListings();
+                JobsGrid.ItemsSource = jobs;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error loading job listings for UI");
+            }
+        }
+
+        private void Load_User_Applications()
+        {
+            try
+            {
+                var db = new DatabaseService();
+                var applications = db.GetApplications(_currentUser.UserID);
+                ApplicationsGrid.ItemsSource = applications;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error loading applications for UI");
+            }
+        }
+
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Application submitted successfully!");
@@ -105,6 +132,11 @@ namespace MilSync.Views
         {
             new MainWindow().Show();
             this.Close();
+        }
+
+        private void JobsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

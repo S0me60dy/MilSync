@@ -20,14 +20,12 @@ namespace MilSync.Services
             using (var conn = _dbService.GetConnection())
             {
                 conn.Open();
-                // SQL based on your USER table structure
                 string sql = "SELECT UserID, Username, Email, IsActive, Role FROM USER";
                 using (var cmd = new MySqlCommand(sql, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        // We use a concrete class because User is abstract
                         users.Add(new Admin 
                         { 
                             UserID = reader.GetInt32("UserID"),

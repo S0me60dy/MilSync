@@ -9,6 +9,7 @@ namespace MilSync.Models
         public string? Location { get; set; }
         public decimal Salary { get; set; }
         public string? RequiredRank { get; set;}
+        public string Requirements => RequiredRank ?? "N/A";
         
         // Relationships in DB, adding "foreign keys"(navigation properties)
 
