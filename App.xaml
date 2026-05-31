@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:MilSync"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+		<Style x:Key="GreenBtn" TargetType="Button">
+			<Setter Property="Background" Value="#27AE60"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="Cursor" Value="Hand"/>
+		</Style>
          
     </Application.Resources>
 </Application>

@@ -125,7 +125,42 @@ namespace MilSync.Views
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Application submitted successfully!");
+            try
+            {
+                if (sender is not Button button || button.DataContext is not Job selectedJob)
+                {
+                    MessageBox.Show("Please select a job first.");
+                    return;
+                }
+
+                var db = new DatabaseService();
+
+                var application = new MilSync.Models.Application
+                {
+                    UserID = _currentUser.UserID,
+                    JobID = selectedJob.JobID,
+                    SubmissionDate = DateTime.Now,
+                    Status = "Pending"
+                };
+
+                int applicationId = db.CreateApplication(application);
+
+                if (applicationId > 0)
+                {
+                    MessageBox.Show("Application submitted successfully!");
+                        
+                    Load_User_Applications();
+                }
+                else
+                {
+                    MessageBox.Show("Could not submit application. Please try again.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, "Error applying for job");
+                MessageBox.Show("An error occurred while submitting your application.");
+            }
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
