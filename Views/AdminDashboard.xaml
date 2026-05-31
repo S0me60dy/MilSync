@@ -1,0 +1,203 @@
+<Window x:Class="MilSync.Views.AdminDashboard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MilSync - Admin Dashboard" Height="600" Width="900"
+        Background="#1A1F2E">
+    <Window.Resources>
+        <Style x:Key="NavBtn" TargetType="Button">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="#8B9EC0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Setter Property="Padding"         Value="16,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+        </Style>
+        <Style x:Key="ActiveNav" TargetType="Button" BasedOn="{StaticResource NavBtn}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#252D3D"/>
+        </Style>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background"   Value="#252D3D"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding"      Value="16"/>
+            <Setter Property="Margin"       Value="0,0,0,12"/>
+        </Style>
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#8B9EC0"/>
+            <Setter Property="FontSize"   Value="11"/>
+            <Setter Property="Margin"     Value="0,0,0,3"/>
+        </Style>
+        <Style x:Key="FieldInput" TargetType="TextBox">
+            <Setter Property="Background"      Value="#1A1F2E"/>
+            <Setter Property="Foreground"      Value="#E0E6F0"/>
+            <Setter Property="BorderBrush"     Value="#3A4A6B"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="8,5"/>
+            <Setter Property="Margin"          Value="0,0,0,10"/>
+            <Setter Property="FontSize"        Value="13"/>
+        </Style>
+        <Style x:Key="PrimaryBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#2563EB"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="Padding"         Value="14,7"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontSize"        Value="13"/>
+        </Style>
+        <Style x:Key="GreenBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#064E3B"/>
+            <Setter Property="Foreground"      Value="#6EE7B7"/>
+            <Setter Property="Padding"         Value="10,6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontSize"        Value="12"/>
+        </Style>
+        <Style x:Key="RedBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#7F1D1D"/>
+            <Setter Property="Foreground"      Value="#FCA5A5"/>
+            <Setter Property="Padding"         Value="10,6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontSize"        Value="12"/>
+        </Style>
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="Foreground"  Value="White"/>
+            <Setter Property="FontSize"    Value="16"/>
+            <Setter Property="FontWeight"  Value="SemiBold"/>
+            <Setter Property="Margin"      Value="0,0,0,12"/>
+        </Style>
+        <!-- Shared DataGrid styling -->
+        <Style x:Key="AppDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowBackground" Value="#FFFFFF"/>
+            <Setter Property="AlternatingRowBackground" Value="#F7F9FC"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="RowHeight" Value="34"/>
+            <Setter Property="ColumnWidth" Value="*"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="BorderBrush" Value="#E6EDF8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F4F7FB"/>
+                        <Setter Property="Foreground" Value="#2B3A4A"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="8,6"/>
+                        <Setter Property="BorderBrush" Value="#E6EDF8"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="8,4"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Background="#2C3E50">
+            <TextBlock Text="ADMIN PANEL" Foreground="White" Margin="20" FontWeight="Bold" FontSize="18"/>
+            <Button Content="Manage Personnel" Style="{StaticResource ActiveNav}" Margin="6" Padding="0" Click="Button_Click_1"/>
+            <Button Content="Audit Logs" Style="{StaticResource NavBtn}" Margin="6" Padding="0"/>
+            <Button Content="Job Postings" Style="{StaticResource NavBtn}" Margin="6" Padding="0" Click="Button_Click"/>
+            <Separator Margin="10" Background="#34495E"/>
+            <Button Content="Logout" Click="Logout_Click" Margin="10" Padding="8" Style="{StaticResource RedBtn}"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Margin="20">
+            <TabControl x:Name="AdminTabControl" SelectionChanged="AdminTabControl_SelectionChanged">
+                <TabItem Header="Personnel">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Personnel Management" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+                        <DataGrid x:Name="UsersDataGrid" Grid.Row="1" Style="{StaticResource AppDataGrid}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding UserID}" Width="50"/>
+                                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
+                                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                                <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" Width="100"/>
+                                <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="60"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Job Postings">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Job Postings" Style="{StaticResource SectionTitle}" VerticalAlignment="Center"/>
+                            <Button Content="Create" Click="CreateJob_Click" Margin="10,0,0,0" Style="{StaticResource PrimaryBtn}"/>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBox x:Name="EditByIdTextBox" Width="80" HorizontalContentAlignment="Center" Style="{StaticResource FieldInput}"/>
+                                <Button Content="Edit" Click="EditById_Click" Margin="6,0,0,0" Style="{StaticResource PrimaryBtn}"/>
+                                <Button Content="Delete" Click="DeleteById_Click" Margin="6,0,0,0" Style="{StaticResource RedBtn}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <DataGrid x:Name="JobsDataGrid" Grid.Row="1" Style="{StaticResource AppDataGrid}"
+                                MouseDoubleClick="JobsDataGrid_MouseDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="JobID" Binding="{Binding JobID}" Width="80"/>
+                                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="150"/>
+                                <DataGridTextColumn Header="Salary" Binding="{Binding Salary}" Width="100"/>
+                                <DataGridTextColumn Header="Required Rank" Binding="{Binding RequiredRank}" Width="120"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Applications">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Applications" Style="{StaticResource SectionTitle}" VerticalAlignment="Center"/>
+                            <Button Content="Create" Click="CreateApplication_Click" Margin="10,0,0,0" Style="{StaticResource PrimaryBtn}"/>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBox x:Name="EditAppByIdTextBox" Width="80" HorizontalContentAlignment="Center" Style="{StaticResource FieldInput}"/>
+                                <Button Content="Edit" Click="EditAppById_Click" Margin="6,0,0,0" Style="{StaticResource PrimaryBtn}"/>
+                                <Button Content="Delete" Click="DeleteAppById_Click" Margin="6,0,0,0" Style="{StaticResource RedBtn}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                        <DataGrid x:Name="ApplicationsDataGrid" Grid.Row="1" Style="{StaticResource AppDataGrid}" CellEditEnding="ApplicationsDataGrid_CellEditEnding">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding ApplicationID}" Width="60"/>
+                                <DataGridTextColumn Header="User" Binding="{Binding Username}" Width="150"/>
+                                <DataGridTextColumn Header="Job" Binding="{Binding JobTitle}" Width="*"/>
+                                <DataGridTextColumn Header="Submitted" Binding="{Binding SubmissionDate}" Width="160"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>
